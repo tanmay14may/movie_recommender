@@ -1,21 +1,24 @@
 import pickle
 import streamlit as st
-import requests
+import gdown
 import io
 
-# ---------------- Google Drive links ----------------
-MOVIE_LIST_URL = "https://drive.google.com/uc?export=download&id=1SCLlIPw5Pf0QZg4Am5riKd5wCk5dVThu"
-SIMILARITY_URL = "https://drive.google.com/uc?export=download&id=1m5m2SD3tKa1tta2tUSvqzf5bBOA_qoPA"
+# ---------------- Google Drive file IDs ----------------
+MOVIE_LIST_ID = "1SCLlIPw5Pf0QZg4Am5riKd5wCk5dVThu"
+SIMILARITY_ID = "1m5m2SD3tKa1tta2tUSvqzf5bBOA_qoPA"
 
-# ---------------- Load .pkl from URL ----------------
+# ---------------- Load .pkl from Google Drive ----------------
 @st.cache_data
-def load_pickle_from_url(url):
-    response = requests.get(url)
-    response.raise_for_status()
-    return pickle.load(io.BytesIO(response.content))
+def load_pickle_from_gdrive(file_id):
+    url = f"https://drive.google.com/uc?id={file_id}"
+    # Download the file content
+    output = io.BytesIO()
+    gdown.download(url, output, quiet=True, fuzzy=True)
+    output.seek(0)
+    return pickle.load(output)
 
-movies = load_pickle_from_url(MOVIE_LIST_URL)
-similarity = load_pickle_from_url(SIMILARITY_URL)
+movies = load_pickle_from_gdrive(MOVIE_LIST_ID)
+similarity = load_pickle_from_gdrive(SIMILARITY_ID)
 
 # ---------------- TMDB poster fetch ----------------
 def fetch_poster(movie_id):
