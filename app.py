@@ -57,6 +57,10 @@ def recommend(movie):
 # ---------------- Streamlit UI ----------------
 st.set_page_config(page_title="Movie Recommender", layout="wide")
 st.header('🎬 Movie Recommender System')
+st.markdown(
+    "<p style='font-size:12px; text-align:center;'>by Tanmay, Ujjwal and Siddhant</p>",
+    unsafe_allow_html=True
+)
 
 movie_list = movies['title'].values
 selected_movie = st.selectbox(
@@ -72,3 +76,4 @@ if st.button('Show Recommendation'):
             with col:
                 st.text(recommended_movie_names[idx])
                 st.image(recommended_movie_posters[idx])
+
